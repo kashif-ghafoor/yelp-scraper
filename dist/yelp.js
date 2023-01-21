@@ -45,8 +45,12 @@ function main() {
     return __awaiter(this, void 0, void 0, function* () {
         const client_email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
         const private_key = process.env.GOOGLE_PRIVATE_KEY;
-        if (!client_email || !private_key) {
-            console.error("Missing GOOGLE_SERVICE_ACCOUNT_EMAIL or GOOGLE_PRIVATE_KEY in .env file");
+        const sheet_id = process.env.GOOGLE_SHEET_ID;
+        console.log("client_email: ", client_email);
+        console.log("private_key: ", private_key);
+        console.log("sheet_id: ", sheet_id);
+        if (!client_email || !private_key || !sheet_id) {
+            console.error("Missing GOOGLE_SERVICE_ACCOUNT_EMAIL or GOOGLE_PRIVATE_KEY or GOOGLE_SHEET_ID in .env file");
             return;
         }
         console.log("scraping search Results (headers) ...");
@@ -57,7 +61,7 @@ function main() {
             // read restaurants data from temp/restaurants.json
             const restaurants = JSON.parse(fs_1.default.readFileSync("temp/restaurants.json", "utf-8"));
             console.log("total restaurants: ", restaurants.length);
-            const doc = new google_spreadsheet_1.GoogleSpreadsheet("1Al_1bz4uxM5n7weYe0phYw9DATtsTbyOBKdjPS5o-Sw");
+            const doc = new google_spreadsheet_1.GoogleSpreadsheet(sheet_id);
             yield doc.useServiceAccountAuth({
                 client_email,
                 private_key,

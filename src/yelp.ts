@@ -9,10 +9,14 @@ import fs from "fs";
 async function main() {
   const client_email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
   const private_key = process.env.GOOGLE_PRIVATE_KEY;
+  const sheet_id = process.env.GOOGLE_SHEET_ID;
+  console.log("client_email: ", client_email);
+  console.log("private_key: ", private_key);
+  console.log("sheet_id: ", sheet_id);
 
-  if (!client_email || !private_key) {
+  if (!client_email || !private_key || !sheet_id) {
     console.error(
-      "Missing GOOGLE_SERVICE_ACCOUNT_EMAIL or GOOGLE_PRIVATE_KEY in .env file"
+      "Missing GOOGLE_SERVICE_ACCOUNT_EMAIL or GOOGLE_PRIVATE_KEY or GOOGLE_SHEET_ID in .env file"
     );
     return;
   }
@@ -30,9 +34,7 @@ async function main() {
 
     console.log("total restaurants: ", restaurants.length);
 
-    const doc = new GoogleSpreadsheet(
-      "1Al_1bz4uxM5n7weYe0phYw9DATtsTbyOBKdjPS5o-Sw"
-    );
+    const doc = new GoogleSpreadsheet(sheet_id);
 
     await doc.useServiceAccountAuth({
       client_email,
