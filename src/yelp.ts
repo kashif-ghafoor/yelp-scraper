@@ -10,9 +10,6 @@ async function main() {
   const client_email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
   const private_key = process.env.GOOGLE_PRIVATE_KEY;
   const sheet_id = process.env.GOOGLE_SHEET_ID;
-  console.log("client_email: ", client_email);
-  console.log("private_key: ", private_key);
-  console.log("sheet_id: ", sheet_id);
 
   if (!client_email || !private_key || !sheet_id) {
     console.error(
