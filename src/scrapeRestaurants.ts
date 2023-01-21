@@ -11,7 +11,10 @@ export async function scrapeRestaurants() {
       fs.readFileSync("temp/headers.json", "utf-8")
     );
 
-    browser = await puppeteer.launch();
+    browser = await puppeteer.launch({
+      defaultViewport: null,
+      args: ["--start-maximized"],
+    });
 
     for (let i = 0; i < urls.length; i++) {
       const url = urls[i];

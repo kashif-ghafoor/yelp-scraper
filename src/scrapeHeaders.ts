@@ -10,7 +10,6 @@ export async function scrapeYelpHeaders() {
   try {
     browser = await puppeteer.launch({
       defaultViewport: null,
-      headless: false,
       args: ["--start-maximized"],
     });
 

@@ -16,9 +16,10 @@ async function main() {
     );
     return;
   }
-
+  console.log("scraping search Results (headers) ...");
   await scrapeYelpHeaders();
 
+  console.log("scraping restaurants ...");
   await scrapeRestaurants();
 
   try {
@@ -43,6 +44,7 @@ async function main() {
     const sheet = doc.sheetsByIndex[0];
 
     // sheet.setHeaderRow(["Name", "URL", "Type", "Address", "Reviews", "Rating"]);
+    console.log("formatting data for sheets");
 
     const rows = restaurants.map((el) => {
       return {
@@ -55,6 +57,7 @@ async function main() {
       };
     });
 
+    console.log("pushing data to google sheets ...");
     await sheet.addRows(rows);
   } catch (err) {
     console.error(err);
