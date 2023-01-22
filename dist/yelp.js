@@ -65,7 +65,14 @@ function main() {
             });
             const info = yield doc.loadInfo();
             const sheet = doc.sheetsByIndex[0];
-            // sheet.setHeaderRow(["Name", "URL", "Type", "Address", "Reviews", "Rating"]);
+            sheet.headerValues = [
+                "Name",
+                "URL",
+                "Type",
+                "Address",
+                "Reviews",
+                "Rating",
+            ];
             console.log("formatting data for sheets");
             const rows = restaurants.map((el) => {
                 return {
