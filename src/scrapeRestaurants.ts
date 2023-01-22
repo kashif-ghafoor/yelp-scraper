@@ -19,6 +19,10 @@ export async function scrapeRestaurants() {
     for (let i = 0; i < urls.length; i++) {
       const url = urls[i];
       const restaurant = await scrapePage(url, browser);
+      if (!restaurant) {
+        console.log(`skipping ${url}`);
+        continue;
+      }
       restaurants.push(restaurant);
       console.log(`scraped ${i + 1} of ${urls.length}`);
 
@@ -40,17 +44,23 @@ export async function scrapeRestaurants() {
 async function scrapePage(url: string, browser: Browser) {
   const page = await browser.newPage();
 
-  await page.goto(url);
+  try {
+    await page.goto(url);
 
-  const { name, ...rest } = await extractData(page);
+    const { name, ...rest } = await extractData(page);
 
-  await page.close();
+    await page.close();
 
-  return {
-    name,
-    url,
-    ...rest,
-  };
+    return {
+      name,
+      url,
+      ...rest,
+    };
+  } catch (err) {
+    console.error(err);
+  } finally {
+    await page.close();
+  }
 }
 
 async function extractData(page: Page) {

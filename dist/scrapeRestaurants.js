@@ -39,6 +39,10 @@ function scrapeRestaurants() {
             for (let i = 0; i < urls.length; i++) {
                 const url = urls[i];
                 const restaurant = yield scrapePage(url, browser);
+                if (!restaurant) {
+                    console.log(`skipping ${url}`);
+                    continue;
+                }
                 restaurants.push(restaurant);
                 console.log(`scraped ${i + 1} of ${urls.length}`);
                 // save to file every 10 restaurants
@@ -62,11 +66,19 @@ exports.scrapeRestaurants = scrapeRestaurants;
 function scrapePage(url, browser) {
     return __awaiter(this, void 0, void 0, function* () {
         const page = yield browser.newPage();
-        yield page.goto(url);
-        const _a = yield extractData(page), { name } = _a, rest = __rest(_a, ["name"]);
-        yield page.close();
-        return Object.assign({ name,
-            url }, rest);
+        try {
+            yield page.goto(url);
+            const _a = yield extractData(page), { name } = _a, rest = __rest(_a, ["name"]);
+            yield page.close();
+            return Object.assign({ name,
+                url }, rest);
+        }
+        catch (err) {
+            console.error(err);
+        }
+        finally {
+            yield page.close();
+        }
     });
 }
 function extractData(page) {
