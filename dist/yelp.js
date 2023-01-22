@@ -43,6 +43,7 @@ const google_spreadsheet_1 = require("google-spreadsheet");
 const fs_1 = __importDefault(require("fs"));
 function main() {
     return __awaiter(this, void 0, void 0, function* () {
+        const url = "https://www.yelp.com/search?find_desc=&find_loc=Denali+Borough%2C+AK";
         const client_email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
         const private_key = process.env.GOOGLE_PRIVATE_KEY;
         const sheet_id = process.env.GOOGLE_SHEET_ID;
@@ -51,7 +52,7 @@ function main() {
             return;
         }
         console.log("scraping search Results (headers) ...");
-        yield (0, scrapeHeaders_1.scrapeYelpHeaders)();
+        yield (0, scrapeHeaders_1.scrapeYelpHeaders)(url);
         console.log("scraping restaurants ...");
         yield (0, scrapeRestaurants_1.scrapeRestaurants)();
         try {

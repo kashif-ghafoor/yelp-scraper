@@ -7,6 +7,9 @@ import { Restaurant } from "./types";
 import fs from "fs";
 
 async function main() {
+  const url =
+    "https://www.yelp.com/search?find_desc=&find_loc=Denali+Borough%2C+AK";
+
   const client_email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
   const private_key = process.env.GOOGLE_PRIVATE_KEY;
   const sheet_id = process.env.GOOGLE_SHEET_ID;
@@ -18,7 +21,7 @@ async function main() {
     return;
   }
   console.log("scraping search Results (headers) ...");
-  await scrapeYelpHeaders();
+  await scrapeYelpHeaders(url);
 
   console.log("scraping restaurants ...");
   await scrapeRestaurants();
