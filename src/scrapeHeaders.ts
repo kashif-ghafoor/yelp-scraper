@@ -1,7 +1,7 @@
 import puppeteer, { Browser, Page } from "puppeteer";
 import fs from "fs";
 
-export async function scrapeYelpHeaders() {
+export async function scrapeYelpHeaders(url: string) {
   // contain all urls
   const headers: string[] = [];
 
@@ -28,10 +28,19 @@ export async function scrapeYelpHeaders() {
       }
     });
 
-    const baseUrl =
-      "https://www.yelp.com/search?find_desc=Restaurants&find_loc=Miami%2C+FL%2C+United+States";
+    const baseUrl = url;
 
     await page.goto(baseUrl);
+
+    const heading = await page.evaluate(() => {
+      return document.querySelector("h1")?.textContent;
+    });
+
+    console.log(heading);
+
+    if (heading?.includes("find the page you")) {
+      throw new Error("page unavailable");
+    }
 
     // page to scrape
     const totalPages = await page.evaluate(() => {
@@ -80,7 +89,9 @@ export async function scrapeYelpHeaders() {
       pageNum++;
     }
   } catch (err) {
-    console.log("err: ", err);
+    if (err instanceof Error && err.message.includes("page unavailable")) {
+      throw new Error("there is some problem with the url");
+    }
   } finally {
     if (browser) {
       await browser.close();

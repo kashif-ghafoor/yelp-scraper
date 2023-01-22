@@ -56,6 +56,6 @@ wait for the script to complete you will see data in your google sheets.
 
 Alternatively you can run it in codespaces.  
 rename .env_sample to .env  
-put the required data in .env 
+put the required data in .env
 npm run start
 tadah...

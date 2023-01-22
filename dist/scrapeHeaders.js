@@ -15,7 +15,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 exports.scrapeYelpHeaders = void 0;
 const puppeteer_1 = __importDefault(require("puppeteer"));
 const fs_1 = __importDefault(require("fs"));
-function scrapeYelpHeaders() {
+function scrapeYelpHeaders(url) {
     return __awaiter(this, void 0, void 0, function* () {
         // contain all urls
         const headers = [];
@@ -37,8 +37,16 @@ function scrapeYelpHeaders() {
                     req.continue();
                 }
             });
-            const baseUrl = "https://www.yelp.com/search?find_desc=Restaurants&find_loc=Miami%2C+FL%2C+United+States";
+            const baseUrl = url;
             yield page.goto(baseUrl);
+            const heading = yield page.evaluate(() => {
+                var _a;
+                return (_a = document.querySelector("h1")) === null || _a === void 0 ? void 0 : _a.textContent;
+            });
+            console.log(heading);
+            if (heading === null || heading === void 0 ? void 0 : heading.includes("find the page you")) {
+                throw new Error("page unavailable");
+            }
             // page to scrape
             const totalPages = yield page.evaluate(() => {
                 var _a, _b, _c;
@@ -81,7 +89,9 @@ function scrapeYelpHeaders() {
             }
         }
         catch (err) {
-            console.log("err: ", err);
+            if (err instanceof Error && err.message.includes("page unavailable")) {
+                throw new Error("there is some problem with the url");
+            }
         }
         finally {
             if (browser) {
