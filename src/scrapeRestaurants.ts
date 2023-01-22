@@ -49,8 +49,6 @@ async function scrapePage(url: string, browser: Browser) {
 
     const { name, ...rest } = await extractData(page);
 
-    await page.close();
-
     return {
       name,
       url,

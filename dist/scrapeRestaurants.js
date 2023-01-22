@@ -69,7 +69,6 @@ function scrapePage(url, browser) {
         try {
             yield page.goto(url);
             const _a = yield extractData(page), { name } = _a, rest = __rest(_a, ["name"]);
-            yield page.close();
             return Object.assign({ name,
                 url }, rest);
         }
